@@ -5,5 +5,5 @@ The app features: User authorization, input sanitation, blog and comment paginat
 
 [See the live demo here](https://blurt-app.herokuapp.com/)
 
->Technologies used: Javascript with jQuery and ejs templating, SASS (scss) and Bootstrap 5, Node.js with Express, MongoDB with Mongoose, Passport.js, Google reCaptcha, Cloudinary for image upload, and Heroku for deployment.
+>Technologies used: Javascript with jQuery and ejs templating, SASS (scss) and Bootstrap 5, Node.js with Express, MongoDB with Mongoose, Passport.js, Google reCaptcha, jest, Cloudinary for image upload, and Heroku for deployment.
 
