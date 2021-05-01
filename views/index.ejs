@@ -1,0 +1,129 @@
+<%- include("partials/header") %>
+
+
+<nav class="navbar navbar-expand-lg py-0 navbar-light">
+    <div class="col d-flex align-items-around"> <!-- col was here as a class -->
+        <button class="navbar-toggler mt-3 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <span class="d-flex d-lg-none navbar-brand ml-3 pt-0"><a href="/blogs">blurt.</a></span>
+    </div>
+
+
+    <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
+        <a class="d-none d-lg-block navbar-brand mx-auto mt-2 mb-4 pb-3 text-center" href="/blogs"> blurt.
+            <p class="d-none d-lg-block">a community blog</p>
+        </a>
+        <ul class="navbar-nav">
+            <li class="nav-item my-2">
+                <a class="nav-link text-center active-nav-link" href="/blogs"><i class="bi bi-files"></i> all blogs</a>
+            </li>
+            <hr>
+            <li class="nav-item my-2">
+                <a class="nav-link text-center" href="/blogs/new"><i class="bi bi-file-text"></i> new blog</a>
+            </li>
+            <hr>
+            <% if (!currentUser) { %>
+                <li class="nav-item my-2">
+                    <a class="nav-link text-center" href="/register"><i class="bi bi-person-plus"></i> register</a>
+                </li>
+                <hr>
+                <li class="nav-item my-2">
+                    <a class="nav-link text-center" href="/login"><i class="bi bi-person-check"></i> login</a>
+                </li>
+                <hr>
+            <% } %>
+
+            <% if (currentUser) { %>
+                <li class="nav-item my-2">
+                    <a class="nav-link text-center" href="/logout"><i class="bi bi-person-dash"></i> logout</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+
+<%- include("partials/loginMsg") %>
+
+<main>
+        <section>
+            <div class="container-fluid">
+
+                    <% if (success && success.length) { %>
+                        <div class="alert alert-success alert-dismissible fade show mt-5  center-margin" role="alert">
+                            <%=success%>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %> 
+
+                    <% if (error && error.length) { %>
+                        <div class="alert alert-danger alert-dismissible fade show mt-5 w center-margin" role="alert">
+                            <%=error%>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                <h1 class="mt-3"> <span class="py-0 px-2 thick-underline">all blogs.</span> </h1>	 
+
+                <% if (blogs.length > 0) { %> 
+                    <% blogs.forEach(function(blogs){ %>
+                        <div class="row">
+                            <div class="card col-8 col-lg-4 col-md-6 px-0 my-5">
+                                <% if (blogs.images.length > 0) { %>
+                                    <img src="<%=blogs.images[0].url%>" class="card-img-top" alt="...">
+                                <% } %> 
+                                <div class="card-body">
+                                  <h5 class="card-title">
+                                      <a href="/blogs/<%=blogs._id%>"> <%=blogs.title%></a>
+                                  </h5>
+                                  <p class="mb-1"> <i class="bi bi-person-fill"></i> by: <span class="author thick-underline px-1"><%=blogs.author.username%></span>, <span class="text-muted"> <%=blogs.created.toDateString()%> </span> </p>
+    
+                                  <% let longPost; %> 
+                                  <% blogs.body.length > 100 ? longPost = true : longPost = false %>
+                                  <p class="format-text"><%-blogs.body.substring(0, 100)%> <%= longPost ? '...' : '' %> </p>
+    
+                                  <a href="/blogs/<%=blogs._id%>" class="btn btn-primary">read more</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+
+                    <div class="row">
+                        <ul class="pagination col-4 justify-content-center">
+
+                            <% if (canGoBack) { %> 
+                                <a class="px-2 mx-1 pageNav" href="/blogs/?page=<%=pageNumber-1%>">« </a>
+                            <% } else { %> 
+                                <a class="px-2 mx-1 pageNav" href="#">« </a>
+                            <% } %> 
+
+                            <% for (let page = 1; page < (pageCount+1); page++) { %> 
+                                <li class="px-2 mx-1 <%= pageNumber === page ? 'activePage' : '' %>">
+                                    <a href="/blogs/?page=<%=page%>"><%=page%></a>
+                                </li>
+                            <% } %> 
+
+                            <% if (pageNumber !== pageCount) { %> 
+                                <a class="px-2 mx-1 pageNav" href="/blogs/?page=<%=pageNumber+1%>"> »</a>
+                            <% } else { %> 
+                                <a class="px-2 mx-1 pageNav" href="#"> »</a>
+                            <% } %> 
+
+                        </ul>
+                    </div>
+                <% } else { %> 
+                    <h5 class="mt-4">there are no blogs posted currently. <br>click "new blog" on the left to get started. </h5>
+                <% } %> 
+
+            </div>
+        </section>
+        
+        <script>            
+            $('.pagination li').on('click', function() {
+                $('.pagination li').removeClass('activePage');
+                $(this).addClass('activePage')
+            });     
+        </script>
+
+<%- include("partials/footer") %>

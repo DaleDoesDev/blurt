@@ -1,0 +1,9 @@
+<section>
+    <div class="container-fluid">
+        <% if (!currentUser) { %>
+            <span class="card login-status text-center mt-3 py-2 px-2">you are not logged in.</span>
+        <% } else { %> 
+            <span class="card login-status text-center mt-3 py-1 px-2 mb-0">signed in as: <strong><%=currentUser.username%></strong> </span>
+        <% } %> 
+    </div>
+</section>

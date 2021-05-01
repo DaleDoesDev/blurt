@@ -1,0 +1,178 @@
+<%- include("partials/header") %>
+
+<nav class="navbar navbar-expand-lg py-0 navbar-light">
+    <div class="col d-flex align-items-around"> 
+        <button class="navbar-toggler mt-3 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <span class="d-flex d-lg-none navbar-brand ml-3 pt-0"><a href="/blogs">blurt.</a></span>
+    </div>
+
+
+    <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
+        <a class="d-none d-lg-block navbar-brand mx-auto mt-2 mb-4 pb-3 text-center" href="/blogs"> blurt.
+            <p class="d-none d-lg-block">a community blog</p>
+        </a>
+        <ul class="navbar-nav">
+            <li class="nav-item my-2">
+                <a class="nav-link text-center" href="/blogs"><i class="bi bi-files"></i> all blogs</a>
+            </li>
+            <hr>
+            <li class="nav-item my-2">
+                <a class="nav-link text-center" href="/blogs/new"><i class="bi bi-file-text"></i> new blog</a>
+            </li>
+            <hr>
+            <% if (!currentUser) { %>
+                <li class="nav-item my-2">
+                    <a class="nav-link text-center" href="/register"><i class="bi bi-person-plus"></i> register</a>
+                </li>
+                <hr>
+                <li class="nav-item my-2">
+                    <a class="nav-link text-center" href="/login"><i class="bi bi-person-check"></i> login</a>
+                </li>
+                <hr>
+            <% } %>
+
+            <% if (currentUser) { %>
+                <li class="nav-item my-2">
+                    <a class="nav-link text-center" href="/logout"><i class="bi bi-person-dash"></i> logout</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+
+<%- include("partials/loginMsg") %>
+
+<main>
+    <section>
+        <div class="container-fluid">
+                <div class="row">                
+                
+                    <% if (success && success.length) { %>
+                        <div class="alert alert-success alert-dismissible fade show mt-5  show-page-card" role="alert">
+                            <%=success%>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %> 
+
+                    <% if (error && error.length) { %>
+                        <div class="alert alert-danger alert-dismissible fade show mt-5 show-page-card" role="alert">
+                            <%=error%>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
+                    <div class="card col-md-9 col-lg-7 px-0 my-5 show-page-card left-spacing-two">
+                        <div id="carouselBlogControls" class="carousel slide" data-bs-interval="false">
+                            <div class="carousel-inner">
+                                <% blog.images.forEach( (img, i) => { %> 
+                                    <div class="carousel-item <%= i === 0 ? 'active': '' %>" >
+                                        <img src="<%=img.url%>" class="d-block w-100" alt="...">
+                                    </div>
+                                <% }) %> 
+                            </div>
+                            <% if (blog.images.length > 1) { %> 
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlogControls" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselBlogControls" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                                </button>
+                            <% } %> 
+                          </div>
+
+
+                        <div class="card-body">
+                            <h1 class="card-title mx-0 text-center mt-3"><%=blog.title%></h1>
+                            <i class="bi bi-person-fill"></i> by: <span class="author thick-underline px-1"> <strong><%=blog.author.username%></strong></span>,
+                            <span class="text-muted mb-5"> <%=blog.created.toDateString()%> </span>
+
+                            <p class="format-text mt-2"><%-blog.body%></p>
+                            <% if (currentUser && blog.author.equals(currentUser._id)) { %>
+                                <div class="row justify-content-around">
+                                    <a href="/blogs/<%=blog._id%>/edit" class="btn btn-primary col-2 mt-2 mb-3">edit</a>
+                                    <form id="delete" action="/blogs/<%=blog._id%>?_method=DELETE" method="POST" class="col-3 col-lg-2 mt-2 mb-3">
+                                        <button class="btn btn-primary px-4">delete</button>
+                                    </form>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>	
+                    <div class="row">
+                        
+                        <% if (comments.length) { %>
+                            <div class="col-9 col-lg-7 my-0 px-0 show-page-card">
+                                <h1 class="mt-3 mb-4"> <span class="py-0 px-2 thick-underline">comments.</span> </h1>
+                            </div>
+
+                            <% comments.forEach( (comment) => { %>
+                                <div class="col-9 col-lg-7 px-0 my-3 show-page-card comment">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="px-2 py-1 mb-0 name d-inline"> 
+                                            <span>
+                                                <span class="author"><i class="bi bi-person-fill"></i><strong> <%= comment.author.username %> </strong> </span> <span class="date">- <%= comment.created.toLocaleDateString() %> </span>
+
+                                                <% if (currentUser && comment.author.equals(currentUser._id)) { %>
+                                                    <form class = "mx-0 d-inline" action="/blogs/<%=blog._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                                                        <button class="delete-btn">
+                                                            <i class="bi bi-x-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                <% } %>
+
+                                            </span> 
+                                        </p>
+                                    </div>
+                                    <p class="px-3 py-1 format-text my-1"><%= comment.body %></p>
+                                </div>
+                            <% }) %>
+
+                        <% } %>
+
+                    <% if (blog.comments.length > 0) { %> 
+                        <ul class="pagination show-page-pagination col-8 col-lg-6">
+
+                            <% if (canGoBack) { %> 
+                                <a class="px-2 mx-1 pageNav" href="/blogs/<%=blog._id%>/?page=<%=pageNumber-1%>">« </a>
+                            <% } else { %> 
+                                <a class="px-2 mx-1 pageNav" href="#">« </a>
+                            <% } %> 
+
+                            <% for (let page = 1; page < (pageCount+1); page++) { %> 
+                                <li class="px-2 mx-1 <%= pageNumber === page ? 'activePage' : '' %>">
+                                    <a href="/blogs/<%=blog._id%>/?page=<%=page%>"><%=page%></a>
+                                </li>
+                            <% } %> 
+
+                            <% if (pageNumber !== pageCount) { %> 
+                                <a class="px-2 mx-1 pageNav" href="/blogs/<%=blog._id%>/?page=<%=pageNumber+1%>"> »</a>
+                            <% } else { %> 
+                                <a class="px-2 mx-1 pageNav" href="#"> »</a>
+                            <% } %> 
+
+                        </ul>
+                    <% } %> 
+
+
+                        <% if (currentUser) { %>
+                            <form action="/blogs/<%=blog._id%>/comments" method="POST" class="col-9 col-lg-7 px-0 my-4 show-page-card left-spacing">
+
+                                <h2 class="mb-3">leave a comment</h2>
+
+                                <textarea rows="4" class="form-control textbox" placeholder="enter your comment here..." name="comment[body]" required oninvalid="this.setCustomValidity('The comment content is required.')" oninput="this.setCustomValidity('')"></textarea>
+
+                                <button class="btn btn-primary px-5 ml-0 my-4">post</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+        </div>
+    </section>
+</main>
+
+<%- include("partials/footer") %>
