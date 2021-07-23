@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, //use SSL
     auth: {
         user: `${process.env.EMAIL_ADDRESS}`,
         pass: `${process.env.EMAIL_PASSWORD}`
@@ -91,7 +93,7 @@ module.exports.changePw = async (req, res) => {
                 user.keyExpiration = Date.now() + 3600000; //1 hour
                 user.save();
                 const mailOptions = {
-                    from: `${process.env.EMAIL_ADDRESS}`,
+                    from: `"blurt." <${process.env.EMAIL_ADDRESS}>`,
                     to: `${email}`,
                     subject: 'Link to Reset Password',
                     text: 'You are receiving this email because there has been a request to reset your password. \n\n'
@@ -104,7 +106,7 @@ module.exports.changePw = async (req, res) => {
                     if (err) {
                         console.log(err);
                         req.flash('error', "unable to send password reset link.");
-                        res.redirect('forgot')
+                        res.redirect('blogs');
                     } 
                 });
 
@@ -116,6 +118,6 @@ module.exports.changePw = async (req, res) => {
     catch(e) {
         console.log(e.message)
         req.flash('error', "something didn\'t go quite right.");
-        res.redirect('/forgot')
+        res.redirect('/blogs');
     }
 }   
