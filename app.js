@@ -27,15 +27,13 @@ const secret = process.env.SECRET || 'thisisnotagoodsecret'
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
-.then(() => console.log('Connected to DB!'))
-.catch(error => console.log(error.message))
+}).then(() => console.log('Connected to DB!')).catch(error => console.log(error.message));
 
 app.set("view engine", "ejs")
 app.set('views', path.join(__dirname, '/views'))
 
 app.use(express.static("public"))
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true})) //this is body-parser
 app.use(expressSanitizer())
 app.use(methodOverride("_method"))
 app.use(cookieParser())

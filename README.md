@@ -1,9 +1,20 @@
-# blurt
+# blurt.
 "blurt." is a full-stack Node.js application allowing full CRUD operation for user-submitted blog posts and the ability to post and delete blog comments. 
 
-The app features: User authorization, input sanitation, blog and comment pagination, multiple image upload, and user sign-in/sign-up with reCaptcha and forgot password functionality.
+The app features user authorization, input sanitation, pagination, multiple image upload, user sign-in/sign-up with reCaptcha and forgot password functionality.
 
-[See the live demo here](https://blurt-app.herokuapp.com/)
+>Technologies used: Javascript with jQuery and ejs templating, SASS (scss) and Bootstrap 5, Node.js with Express, MongoDB with Mongoose, Passport.js, Google reCaptcha, jest, Cloudinary for image upload, Nodemailer for password reset, and Heroku for deployment.
 
->Technologies used: Javascript with jQuery and ejs templating, SASS (scss) and Bootstrap 5, Node.js with Express, MongoDB with Mongoose, Passport.js, Google reCaptcha, jest, Cloudinary for image upload, and Heroku for deployment.
+To **test the application**: 
+* Register as a new user to interact with the app. 
+* Or sign-in as a test user from the table below and manipulate their posts and comments.
+
+Username | Password
+------------ | -------------
+admin | Admin_2021
+testuser | Test_2021
+
+[Try out the live demo here](https://blurt-app.herokuapp.com/)
+
+
 

@@ -111,7 +111,7 @@ module.exports.changePw = async (req, res) => {
             } 
 
             req.flash('success', "if the provided email is registered, it will receive a password reset link.");
-            res.redirect('/forgot')
+            res.redirect('/blogs')
         } 
     catch(e) {
         console.log(e.message)
