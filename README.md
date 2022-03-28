@@ -5,7 +5,7 @@
 
 The app features user authorization, input sanitation, pagination, multiple image upload, user sign-in/sign-up with reCaptcha and forgot password functionality.
 
->Technologies used: Javascript with jQuery and ejs templating, SASS (scss) and Bootstrap 5, Node.js with Express, MongoDB with Mongoose, Passport.js, Google reCaptcha, jest, Cloudinary for image upload, Nodemailer for password reset, and Heroku for deployment.
+>Technologies used: Javascript with jQuery and ejs templating, SASS (scss) and Bootstrap 5, Node.js with Express, MongoDB with Mongoose, Passport.js, Google reCaptcha, Cloudinary for image upload, Nodemailer for password reset, and Heroku for deployment.
 
 To **test the application**: 
 * Register as a new user to interact with the app. 
